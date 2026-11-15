@@ -1,0 +1,8 @@
+node_modules/
+.env
+*.log
+
+# Arquivos locais e backups
+*.backup-*
+backup-v1-original/
+teste.txt
