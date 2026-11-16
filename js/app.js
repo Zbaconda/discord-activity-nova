@@ -1,5 +1,6 @@
 const API = "/api";
 const IS_DISCORD = window.location.hostname.endsWith("discordsays.com");
+const EMBED_BASE = IS_DISCORD ? "/.proxy/embed" : "https://myembed.biz";
 const TMDB_IMG_BASE = IS_DISCORD ? "/.proxy/tmdb-img/t/p" : "https://image.tmdb.org/t/p";
 const IMAGE = `${TMDB_IMG_BASE}/w500`;
 
@@ -713,15 +714,15 @@ function buildEmbedUrl(item, episode = null) {
   }
 
   if (item.type === "movie") {
-    return `https://myembed.biz/filme/${id}`;
+    return `${EMBED_BASE}/filme/${id}`;
   }
 
   if (item.type === "tv") {
     if (episode) {
-      return `https://myembed.biz/serie/${id}/${episode.season}/${episode.number}`;
+      return `${EMBED_BASE}/serie/${id}/${episode.season}/${episode.number}`;
     }
 
-    return `https://myembed.biz/serie/${id}/1/1`;
+    return `${EMBED_BASE}/serie/${id}/1/1`;
   }
 
   throw new Error("Tipo de conteúdo não suportado.");
