@@ -1,4 +1,4 @@
-const API = "http://localhost:3001/api";
+const API = "/api";
 const IMAGE = "https://image.tmdb.org/t/p/w500";
 
 const searchInput = document.getElementById("searchInput");
