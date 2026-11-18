@@ -602,6 +602,12 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+
+app.get(/^\/embedmovies\/(.*)$/, (req, res) => {
+  const targetPath = req.params[0];
+  res.redirect(302, `https://myembed.biz/${targetPath}`);
+});
+
 app.listen(PORT, "0.0.0.0", () => {
   console.log("--------------------------------");
   console.log("       STREAMZONE V1.0");
