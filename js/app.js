@@ -1,8 +1,5 @@
 const API = "/api";
-const IS_DISCORD = window.location.hostname.endsWith("discordsays.com");
-const EMBED_BASE = IS_DISCORD ? "/.proxy/embed" : "https://myembed.biz";
-const TMDB_IMG_BASE = IS_DISCORD ? "/.proxy/tmdb-img/t/p" : "https://image.tmdb.org/t/p";
-const IMAGE = `${TMDB_IMG_BASE}/w500`;
+const IMAGE = "https://image.tmdb.org/t/p/w500";
 
 const searchInput = document.getElementById("searchInput");
 const filtersContainer = document.getElementById("filters");
@@ -713,16 +710,18 @@ function buildEmbedUrl(item, episode = null) {
     throw new Error("ID TMDB inválido.");
   }
 
+  // Discord Activity: route the embed through the app's configured URL Mapping.
+  // Developer Portal mapping required: /embedmovies -> myembed.biz
   if (item.type === "movie") {
-    return `${EMBED_BASE}/filme/${id}`;
+    return `/embedmovies/filme/${id}`;
   }
 
   if (item.type === "tv") {
     if (episode) {
-      return `${EMBED_BASE}/serie/${id}/${episode.season}/${episode.number}`;
+      return `/embedmovies/serie/${id}/${episode.season}/${episode.number}`;
     }
 
-    return `${EMBED_BASE}/serie/${id}/1/1`;
+    return `/embedmovies/serie/${id}/1/1`;
   }
 
   throw new Error("Tipo de conteúdo não suportado.");
@@ -1085,7 +1084,7 @@ async function loadSeriesEpisodes(item, data, requestId) {
         if (episode.still_path) {
           const image = document.createElement("img");
           image.src =
-            `${TMDB_IMG_BASE}/w500${episode.still_path}`;
+            `https://image.tmdb.org/t/p/w500${episode.still_path}`;
           image.alt = episode.name || "Imagem do episódio";
           image.loading = "lazy";
           imageWrap.appendChild(image);
@@ -1249,7 +1248,7 @@ async function openDetails(item) {
 
           if (provider.logo_path) {
             const logo = document.createElement("img");
-            logo.src = `${TMDB_IMG_BASE}/w92${provider.logo_path}`;
+            logo.src = `https://image.tmdb.org/t/p/w92${provider.logo_path}`;
             logo.alt = provider.provider_name;
             logo.loading = "lazy";
             itemElement.appendChild(logo);
@@ -1283,7 +1282,7 @@ async function openDetails(item) {
     }
 
     const backdrop = data.backdrop_path
-      ? `${TMDB_IMG_BASE}/original${data.backdrop_path}`
+      ? `https://image.tmdb.org/t/p/original${data.backdrop_path}`
       : item.backdrop;
 
     selectedBackdrop = backdrop || null;
