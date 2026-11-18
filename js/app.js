@@ -1,5 +1,5 @@
 const API = "/api";
-const IMAGE = "https://image.tmdb.org/t/p/w500";
+const IMAGE = "/tmdb-img/t/p/w500";
 
 const searchInput = document.getElementById("searchInput");
 const filtersContainer = document.getElementById("filters");
@@ -1084,7 +1084,7 @@ async function loadSeriesEpisodes(item, data, requestId) {
         if (episode.still_path) {
           const image = document.createElement("img");
           image.src =
-            `https://image.tmdb.org/t/p/w500${episode.still_path}`;
+            `/tmdb-img/t/p/w500${episode.still_path}`;
           image.alt = episode.name || "Imagem do episódio";
           image.loading = "lazy";
           imageWrap.appendChild(image);
@@ -1248,7 +1248,7 @@ async function openDetails(item) {
 
           if (provider.logo_path) {
             const logo = document.createElement("img");
-            logo.src = `https://image.tmdb.org/t/p/w92${provider.logo_path}`;
+            logo.src = `/tmdb-img/t/p/w92${provider.logo_path}`;
             logo.alt = provider.provider_name;
             logo.loading = "lazy";
             itemElement.appendChild(logo);
@@ -1282,7 +1282,7 @@ async function openDetails(item) {
     }
 
     const backdrop = data.backdrop_path
-      ? `https://image.tmdb.org/t/p/original${data.backdrop_path}`
+      ? `/tmdb-img/t/p/original${data.backdrop_path}`
       : item.backdrop;
 
     selectedBackdrop = backdrop || null;
