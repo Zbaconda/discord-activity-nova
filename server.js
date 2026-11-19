@@ -9,6 +9,8 @@ const PORT = process.env.PORT || 3001;
 const TMDB_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
+const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;
+const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 // Permite comunicação com o frontend local.
 app.use((req, res, next) => {
   const origin = req.headers.origin;
@@ -31,6 +33,47 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+
+app.post("/api/token", async (req, res) => {
+  const code = req.body?.code;
+
+  if (!code) {
+    return res.status(400).json({ error: "Código OAuth ausente." });
+  }
+
+  if (!DISCORD_CLIENT_ID || !DISCORD_CLIENT_SECRET) {
+    return res.status(500).json({ error: "OAuth não configurado." });
+  }
+
+  try {
+    const response = await fetch("https://discord.com/api/oauth2/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        client_id: DISCORD_CLIENT_ID,
+        client_secret: DISCORD_CLIENT_SECRET,
+        grant_type: "authorization_code",
+        code
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Falha na autenticação OAuth:", data.error);
+      return res.status(502).json({
+        error: "Não foi possível autenticar com o Discord."
+      });
+    }
+
+    res.json({ access_token: data.access_token });
+  } catch (error) {
+    console.error("Erro OAuth:", error.message);
+    res.status(500).json({ error: "Erro interno de autenticação." });
+  }
+});
 
 async function tmdbRequest(endpoint, params = {}) {
   if (!TMDB_TOKEN) {
